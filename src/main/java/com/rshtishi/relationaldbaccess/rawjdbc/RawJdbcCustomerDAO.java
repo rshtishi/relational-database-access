@@ -12,14 +12,11 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.rshtishi.relationaldbaccess.dao.CustomerDAO;
+import com.rshtishi.relationaldbaccess.entity.Customer;
+
 @Repository
 public class RawJdbcCustomerDAO implements CustomerDAO {
-
-	private static final String INSERT_SQL = "INSERT INTO CUSTOMER (ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, ZIP_CODE, CITY, STATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String UPDATE_SQL = "UPDATE CUSTOMER SET FIRST_NAME=?, LAST_NAME=?, PHONE=?, EMAIL=?, ZIP_CODE=?, CITY=?, STATE=? WHERE ID=?";
-	private static final String SELECT_ALL_SQL = "SELECT * FROM CUSTOMER";
-	private static final String SELECT_ONE_SQL = "SELECT * FROM  CUSTOMER WHERE ID=?";
-	private static final String DELETE_SQL = "DELETE FROM CUSTOMER WHERE ID = ?";
 
 	@Autowired
 	private DataSource dataSource;

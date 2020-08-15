@@ -1,4 +1,4 @@
-package com.rshtishi.relationaldbaccess.rawjdbc;
+package com.rshtishi.relationaldbaccess.entity;
 
 
 

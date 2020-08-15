@@ -1,4 +1,4 @@
-package com.rshtishi.relationaldbaccess.rawjdbc;
+package com.rshtishi.relationaldbaccess.jdbctemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,54 +12,49 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.rshtishi.relationaldbaccess.dao.CustomerDAO;
 import com.rshtishi.relationaldbaccess.entity.Customer;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class RawJdbcCustomerDAOTest {
+class JdbcTemplateCustomerDAOTest {
 
 	@Autowired
-	private RawJdbcCustomerDAO customerDAO;
+	private JdbcTemplateCustomerDAO customerDAO;
 
 	@Test
 	@Order(1)
 	void testFindAll() {
 		// setup
-		// execute
-		List<Customer> customersReturned = customerDAO.findAll();
+		// exercise
+		List<Customer> customers = customerDAO.findAll();
 		// verify
 		int expectedSize = 1;
-		assertEquals(expectedSize, customersReturned.size());
+		assertEquals(expectedSize, customers.size());
 	}
 
 	@Test
 	@Order(2)
-	void testFindByCustomerNo() {
+	void testFindById() {
 		// setup
-		int id = 1;
-		// execute
-		Customer customerReturned = customerDAO.findByCustomerId(id);
+		int customerId = 1;
+		// exercise
+		Customer customer = customerDAO.findByCustomerId(customerId);
 		// verify
-		String expectedFirstName = "Rando";
-		String expectedLastName = "Shtishi";
-		assertEquals(expectedFirstName, customerReturned.getFirstName());
-		assertEquals(expectedLastName, customerReturned.getLastName());
+		assertEquals(customerId, customer.getId());
 	}
 
 	@Test
 	@Order(3)
 	void testInsert() {
 		// setup
-		Customer newCustomer = new Customer(2, "John", "Doe", "457879878", "johndoe@mail", "1411", "New Jork", "USA");
-		// execute
+		int customerId = 2;
+		Customer newCustomer = new Customer(customerId, "John", "Doe", "457879878", "johndoe@mail", "1411", "New Jork",
+				"USA");
+		// exercise
 		customerDAO.insert(newCustomer);
 		// verify
-		Customer returnedCustomer = customerDAO.findByCustomerId(newCustomer.getId());
-		assertEquals(newCustomer.getId(), returnedCustomer.getId());
-		assertEquals(newCustomer.getFirstName(), returnedCustomer.getFirstName());
-		List<Customer> customers = customerDAO.findAll();
-
+		Customer customer = this.customerDAO.findByCustomerId(customerId);
+		assertEquals(customerId, customer.getId());
 	}
 
 	@Test
@@ -69,12 +64,11 @@ class RawJdbcCustomerDAOTest {
 		int id = 3;
 		List<Customer> customers = new ArrayList<>();
 		customers.add(new Customer(id, "Jane", "Doe", "457879878", "janendoe@mail", "1411", "New Jork", "USA"));
-		// execute
+		// exercise
 		customerDAO.insert(customers);
 		// verify
-		Customer returnedCustomer = customerDAO.findByCustomerId(id);
-		assertEquals(returnedCustomer.getId(), id);
-
+		Customer customer = customerDAO.findByCustomerId(id);
+		assertEquals(id, customer.getId());
 	}
 
 	@Test
@@ -83,7 +77,7 @@ class RawJdbcCustomerDAOTest {
 		// setup
 		int id = 3;
 		Customer customer = customerDAO.findByCustomerId(id);
-		// execute
+		// exercise
 		customerDAO.delete(customer);
 		// verify
 		int expectedSize = 2;
@@ -98,11 +92,12 @@ class RawJdbcCustomerDAOTest {
 		int id = 2;
 		String name = "Jim";
 		Customer customer = new Customer(id, name, "Doe", "457879878", "johndoe@mail", "1411", "New Jork", "USA");
-		// execute
+		// exercise
 		customerDAO.update(customer);
 		// verify
 		Customer returnedCustomer = customerDAO.findByCustomerId(id);
-		assertEquals(name, returnedCustomer.getFirstName());
+		assertEquals(id, returnedCustomer.getId());
+		assertEquals(name,returnedCustomer.getFirstName());
 	}
 
 }
