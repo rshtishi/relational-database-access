@@ -2,6 +2,7 @@ package com.rshtishi.relationaldbaccess.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -59,14 +60,30 @@ class JpaCustomerDAOImpTest {
 	
 	@Test
 	@Order(4)
+	void testSaveAll() {
+		// setup
+		int id = 3;
+		String name = "Jane";
+		List<JpaCustomerEntity> customers = new ArrayList<>();
+		customers.add(new JpaCustomerEntity(id, name, "Doe", "457879878", "janendoe@mail", "1411", "New Jork", "USA"));
+		//execute
+		customerDAO.saveAll(customers);
+		//verify
+		JpaCustomerEntity customer = customerDAO.findById(id);
+		assertEquals(id, customer.getId());
+		assertEquals(name, customer.getFirstName());
+	}
+	
+	@Test
+	@Order(5)
 	void testDelete() {
 		//setup 
-		int id = 2;
+		int id = 3;
 		//execute
 		customerDAO.delete(id);
 		//verify
 		List<JpaCustomerEntity> customers = customerDAO.findAll();
-		int expectedSize = 1;
+		int expectedSize = 2;
 		assertEquals(expectedSize, customers.size());
 	}
 

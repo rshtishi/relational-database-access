@@ -12,6 +12,8 @@ public interface JpaCustomerDAO {
 	
 	void save(JpaCustomerEntity customer);
 	
+	void saveAll(List<JpaCustomerEntity> customer);
+	
 	void delete(int id);
 	
 

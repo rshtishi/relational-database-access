@@ -37,6 +37,12 @@ public class JpaCustomerDAOImp implements JpaCustomerDAO {
 	public void save(JpaCustomerEntity customer) {
 		entityManager.merge(customer);
 	}
+	
+	@Transactional
+	@Override
+	public void saveAll(List<JpaCustomerEntity> customers) {
+		customers.forEach(this::save);
+	}
 
 	@Transactional
 	@Override
