@@ -58,7 +58,6 @@ class RawJdbcCustomerDAOTest {
 		Customer returnedCustomer = customerDAO.findByCustomerId(newCustomer.getId());
 		assertEquals(newCustomer.getId(), returnedCustomer.getId());
 		assertEquals(newCustomer.getFirstName(), returnedCustomer.getFirstName());
-		List<Customer> customers = customerDAO.findAll();
 
 	}
 

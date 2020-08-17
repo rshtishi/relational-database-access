@@ -1,10 +1,18 @@
 package com.rshtishi.relationaldbaccess.dao;
 
-import com.rshtishi.relationaldbaccess.entity.Customer;
+import java.util.List;
+
+import com.rshtishi.relationaldbaccess.entity.JpaCustomerEntity;
 
 public interface JpaCustomerDAO {
 	
-	void save(Customer customer);
+	List<JpaCustomerEntity> findAll();
+	
+	JpaCustomerEntity findById(int id);
+	
+	void save(JpaCustomerEntity customer);
+	
+	void delete(int id);
 	
 
 }
