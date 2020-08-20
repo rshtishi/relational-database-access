@@ -87,5 +87,28 @@ class SpringDataJpaCustomerDAOTest {
 		assertEquals(expectedSize, customers.size());
 	}
 	
+	@Test
+	@Order(6)
+	void testFindByFirstName() {
+		//setup
+		String name = "Rando";
+		//execute
+		List<JpaCustomerEntity> customers = customerDAO.findByFirstName(name);
+		//verify
+		int expectedSize = 1;
+		assertEquals(expectedSize, customers.size());
+	}
+	
+	@Test
+	@Order(7)
+	void testFindByEmailIsNotNull() {
+		//setup
+		//execute
+		List<JpaCustomerEntity> customers = customerDAO.findByEmailIsNotNull();
+		//verify
+		int expectedSize = 2;
+		assertEquals(expectedSize, customers.size());
+	}
+	
 
 }

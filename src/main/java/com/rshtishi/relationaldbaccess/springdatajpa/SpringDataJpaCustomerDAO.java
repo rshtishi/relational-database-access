@@ -11,5 +11,11 @@ public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEnti
 	List<JpaCustomerEntity> findAll();
 	
 	JpaCustomerEntity findById(int id);
+	
+	//derived queries
+	
+	List<JpaCustomerEntity> findByFirstName(String firstName);
+	
+	List<JpaCustomerEntity> findByEmailIsNotNull();
 
 }
