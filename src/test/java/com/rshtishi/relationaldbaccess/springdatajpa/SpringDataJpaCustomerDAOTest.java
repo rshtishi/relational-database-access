@@ -72,43 +72,66 @@ class SpringDataJpaCustomerDAOTest {
 		assertEquals(id, customer.getId());
 		assertEquals(name, customer.getFirstName());
 	}
-	
+
 	@Test
 	@Order(5)
 	void testDelete() {
-		//setup 
+		// setup
 		int id = 3;
 		JpaCustomerEntity customer = customerDAO.findById(id);
-		//execute
+		// execute
 		customerDAO.delete(customer);
-		//verify
+		// verify
 		List<JpaCustomerEntity> customers = customerDAO.findAll();
 		int expectedSize = 2;
 		assertEquals(expectedSize, customers.size());
 	}
-	
+
 	@Test
 	@Order(6)
 	void testFindByFirstName() {
-		//setup
+		// setup
 		String name = "Rando";
-		//execute
+		// execute
 		List<JpaCustomerEntity> customers = customerDAO.findByFirstName(name);
-		//verify
+		// verify
 		int expectedSize = 1;
 		assertEquals(expectedSize, customers.size());
 	}
-	
+
 	@Test
 	@Order(7)
 	void testFindByEmailIsNotNull() {
-		//setup
-		//execute
+		// setup
+		// execute
 		List<JpaCustomerEntity> customers = customerDAO.findByEmailIsNotNull();
-		//verify
+		// verify
 		int expectedSize = 2;
 		assertEquals(expectedSize, customers.size());
 	}
-	
+
+	@Test
+	@Order(8)
+	void testExtractCustomersThatAreFrom() {
+		// setup
+		String city = "Tirane";
+		// execute
+		List<JpaCustomerEntity> customers = customerDAO.extractCustomersThatAreFrom(city);
+		// verify
+		int expectedSize = 1;
+		assertEquals(expectedSize, customers.size());
+	}
+
+	@Test
+	@Order(9)
+	void testExtractCustomerFromCountry() {
+		// setup
+		String country = "Albania";
+		// execute
+		List<JpaCustomerEntity> customers = customerDAO.extractCustomerFromCountry(country);
+		// verify
+		int expectedSize = 1;
+		assertEquals(expectedSize, customers.size());
+	}
 
 }
