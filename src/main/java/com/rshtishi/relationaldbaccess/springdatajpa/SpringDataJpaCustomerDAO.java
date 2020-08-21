@@ -3,13 +3,21 @@ package com.rshtishi.relationaldbaccess.springdatajpa;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.Predicate;
 import com.rshtishi.relationaldbaccess.entity.JpaCustomerEntity;
 
-public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEntity, Integer> {
+@Repository
+public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEntity, Integer>,
+		QuerydslPredicateExecutor<JpaCustomerEntity>, SpringDataJpaCustomerDAOCustom {
 
 	List<JpaCustomerEntity> findAll();
+
+	List<JpaCustomerEntity> findAll(Predicate predicate);
 
 	JpaCustomerEntity findById(int id);
 

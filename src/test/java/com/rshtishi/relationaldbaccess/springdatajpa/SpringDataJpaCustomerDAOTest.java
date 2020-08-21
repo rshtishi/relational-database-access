@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.rshtishi.relationaldbaccess.entity.AddressFilter;
 import com.rshtishi.relationaldbaccess.entity.JpaCustomerEntity;
 
 @SpringBootTest
@@ -133,5 +134,19 @@ class SpringDataJpaCustomerDAOTest {
 		int expectedSize = 1;
 		assertEquals(expectedSize, customers.size());
 	}
+
+	@Test
+	@Order(10)
+	void testFindCustomers() {
+		// setup
+		AddressFilter filter = new AddressFilter("1001", "Tirane", "Albania");
+		// execute
+		List<JpaCustomerEntity> customers = customerDAO.findCustomers(filter);
+		// verify
+		int expectedSize = 1;
+		assertEquals(expectedSize, customers.size());
+	}
+
+
 
 }
