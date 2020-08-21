@@ -9,6 +9,7 @@ at different approaches to accessing the relational database. Below are the topi
 - understanding the DAO (Data Access Object) pattern
 - implementing DAO (Data Access Object) pattern with raw ```JDBC```
 - implementing DAO (Data Access Object) pattern with ```JDBCTemplate```
+- understaning the JPA (Java Persistence Api)
 - implementing DAO (Data Access Object) with JPA (Java Persistence API) 
 - using Spring Data JPA to access the relational database
 
@@ -171,4 +172,60 @@ boilerplate code, like:
 - clean up the statement object and connection
 
 
-### Implementing DAO (Data Access Object) pattern with ```JDBCTemplate```
+### Implementing DAO (Data Access Object) pattern with *JDBCTemplate*
+
+By using ```JDBCTemplate``` we removed a lot of boilerplate code from the implementation of the DAO class. We removed the code needed for handling exception. In general, all exceptions thrown by the Spring JDBC framework are subclasses of ```org.springframework.dao.DataAccessException```, a type of RuntimeException that
+we are not forced to catch. The ```JDBCTemplate``` takes care of resource acquisition, connection management, exception handling, and general error checking that is unrelated to what the code is meant to achieve. Below is the DAO implementation class with ```JDBCTemplate```:
+
+```
+@Repository
+public class JdbcTemplateCustomerDAO implements CustomerDAO {
+
+	@Autowired
+	private JdbcTemplate jdbc;
+
+	@Override
+	public void insert(Customer customer) {
+		jdbc.update(INSERT_SQL, customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getPhone(),
+				customer.getEmail(), customer.getZipCode(), customer.getCity(), customer.getState());
+	}
+
+	@Override
+	public void insert(Iterable<Customer> customers) {
+		customers.forEach(this::insert);
+	}
+
+	@Override
+	public void update(Customer customer) {
+		jdbc.update(UPDATE_SQL, customer.getFirstName(), customer.getLastName(), customer.getPhone(),
+				customer.getEmail(), customer.getZipCode(), customer.getCity(), customer.getState(),customer.getId());
+	}
+
+	@Override
+	public void delete(Customer customer) {
+		jdbc.update(DELETE_SQL, customer.getId());
+	}
+
+	@Override
+	public Customer findByCustomerId(int customerId) {
+		return jdbc.queryForObject(SELECT_ONE_SQL, this::mapRowToCustomer, customerId);
+	}
+
+	@Override
+	public List<Customer> findAll() {
+		return jdbc.query(SELECT_ALL_SQL, this::mapRowToCustomer);
+	}
+
+	private Customer mapRowToCustomer(ResultSet rs, int rownum) throws SQLException {
+		...
+	}
+
+}
+```
+
+```JDBCTemplate``` doesn't help solve the problem of mapping database rows to objects. We have to write manually the code for translating the ```ResultSet``` to the domain model. When having a complex domain model the process of writing the code for each entity becomes tedious and error-prone.
+
+
+### Understaning the JPA (Java Persistence Api)
+
+JPA is J2EE specification that each ORM (Objection-Relational-Mapping) provider must follow.
