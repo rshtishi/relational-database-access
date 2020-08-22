@@ -228,4 +228,92 @@ public class JdbcTemplateCustomerDAO implements CustomerDAO {
 
 ### Understaning the JPA (Java Persistence Api)
 
-JPA is J2EE specification that each ORM (Objection-Relational-Mapping) provider must follow.
+JPA is the J2EE specification that each ORM (Objection-Relational-Mapping) provider must follow. Popular implementations of JPA specification are Hibernate, EclipseLink, and Apache OpenJPA. The JPA implementation is often called the persistence provider. We use the persistence provider(Hibernate, EclipseLink) to reduce the burden of writing codes for relational object management.
+
+The mapping between POJOs and database tables is defined via persistence metadata. JPA metadata is typically defined via annotations in the POJO class. Alternatively, the metadata can be defined via XML or a combination of both. An XML configuration overwrites the annotations. Below is the POJO that we have mapped with database customer table:
+
+```
+@Table(name="customer")
+@Entity(name="Customer")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class JpaCustomerEntity  {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String phone;
+	private String email;
+	private String zipCode;
+	private String city;
+	private String state;
+
+}
+```
+
+- ```@Entity``` annotation marks the classes the should be persisted in the database. The parameter passed to the Entity is the name that is going to be used to refer to this entity. 
+- ```@Table``` annotation maps the POJO with the table in the database. The parameter passed to the ```@Table``` is the name of the table in the database.
+- ```@Id``` annotation marks the id field as the primary key. All entity classes must define a primary key, must have a no-arg constructor.
+- ```@GeneratedValue``` specifies the strategy for generating the primary key. In this example, we have chosen an IDENTITY strategy for primary key generation.
+
+The entity manager ```javax.persistence.EntityManager``` provides the operations for accessing the database. The persistence context describes all entities of one entity manager.
+
+ The ```EntityManagerFactory``` is responsible for creating the entity manager. We configure it by specifying the persistence unit in the persistence.xml file in the META-INF directory.
+ 
+ 
+ ### Implementing DAO (Data Access Object) with JPA (Java Persistence API) 
+ 
+ We have used te ```@PersistenceContext``` annotation to autowire the entity manager. The default persistence context type is ```PersistenceContextType.TRANSACTION```.
+ The transaction persistence context is bound to the transaction. As soon as the transaction finishes, the entities present in the persistence context will be flushed into persistent storage. 
+ Also, we use ```@Transactional``` annotation for removing boilerplate when managing transactions. Below is the DAO implementation with JPA:
+ 
+ ```
+ @Repository
+public class JpaCustomerDAOImp implements JpaCustomerDAO {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<JpaCustomerEntity> findAll() {
+		TypedQuery<JpaCustomerEntity> query = entityManager.createQuery("Select c from Customer c",
+				JpaCustomerEntity.class);
+		return query.getResultList();
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public JpaCustomerEntity findById(int id) {
+		return entityManager.find(JpaCustomerEntity.class, id);
+	}
+
+	@Transactional
+	@Override
+	public void save(JpaCustomerEntity customer) {
+		entityManager.merge(customer);
+	}
+	
+	@Transactional
+	@Override
+	public void saveAll(List<JpaCustomerEntity> customers) {
+		customers.forEach(this::save);
+	}
+
+	@Transactional
+	@Override
+	public void delete(int id) {
+		JpaCustomerEntity customer = entityManager.find(JpaCustomerEntity.class, id);
+		entityManager.remove(customer);
+	}
+
+}
+ ```
+ 
+ ### Using Spring Data JPA to access the relational database
+
+
+
