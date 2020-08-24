@@ -31,5 +31,26 @@
 			</column>
 		</createTable>
 
+		<createTable tableName="product">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="name" type="varchar(30)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="review">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="comment" type="varchar(400)">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_id" type="int">
+				<constraints nullable="false" foreignKeyName="fk_product_id" references="product(id)" />
+			</column>
+		</createTable>
+
 	</changeSet>
 </databaseChangeLog>

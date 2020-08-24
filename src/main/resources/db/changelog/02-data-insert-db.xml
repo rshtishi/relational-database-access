@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 	<changeSet id="02" author="rshtishi">
+		<!-- customer table -->
 		<insert tableName="customer">
 			<column name="id" valueNumeric="1" />
 			<column name="first_name" value="Rando" />
@@ -11,8 +12,53 @@
 			<column name="phone" value="069123456" />
 			<column name="email" value="rando.shtishi@mail.com" />
 			<column name="zip_code" value="1001" />
-			<column name="city"  value="Tirane" />
+			<column name="city" value="Tirane" />
 			<column name="state" value="Albania" />
+		</insert>
+		<!-- product table -->
+		<insert tableName="product">
+			<column name="id" valueNumeric="1" />
+			<column name="name" value="Lap Top" />
+		</insert>
+		<insert tableName="product">
+			<column name="id" valueNumeric="2" />
+			<column name="name" value="Head Phone" />
+		</insert>
+		<insert tableName="product">
+			<column name="id" valueNumeric="3" />
+			<column name="name" value="Smart Phone" />
+		</insert>
+		<!-- review table -->
+		<insert tableName="review">
+			<column name="id" valueNumeric="1" />
+			<column name="comment" value="Excellet product" />
+			<column name="product_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="review">
+			<column name="id" valueNumeric="2" />
+			<column name="comment"
+				value="I am statisfied with the lap top." />
+			<column name="product_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="review">
+			<column name="id" valueNumeric="3" />
+			<column name="comment" value="It does the job." />
+			<column name="product_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="review">
+			<column name="id" valueNumeric="4" />
+			<column name="comment" value="It does the job." />
+			<column name="product_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="review">
+			<column name="id" valueNumeric="5" />
+			<column name="comment" value="It's worthless" />
+			<column name="product_id" valueNumeric="2" />
+		</insert>
+				<insert tableName="review">
+			<column name="id" valueNumeric="6" />
+			<column name="comment" value="Don't buy it, you will regret it" />
+			<column name="product_id" valueNumeric="2" />
 		</insert>
 	</changeSet>
 </databaseChangeLog>
