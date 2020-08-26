@@ -9,6 +9,10 @@ public interface JpaReviewDAO {
 	
 	List<Review> findAll();
 	
-	void insert(Review review);
+	Review findById(int id);
+	
+	void save(Review review);
+	
+	void delete(int id);
 
 }

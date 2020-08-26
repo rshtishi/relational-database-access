@@ -10,28 +10,39 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rshtishi.relationaldbaccess.dao.JpaReviewDAO;
-import com.rshtishi.relationaldbaccess.entity.Product;
 import com.rshtishi.relationaldbaccess.entity.Review;
 
 @Repository
-public class JpaReviewDAOImpl implements JpaReviewDAO{
-	
+public class JpaReviewDAOImpl implements JpaReviewDAO {
+
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	@Transactional(readOnly= true)
+
+	@Transactional(readOnly = true)
 	@Override
-	public List<Review>  findAll() {
-		TypedQuery<Review> query = entityManager.createQuery("Select r from Review r",
-				Review.class);
+	public List<Review> findAll() {
+		TypedQuery<Review> query = entityManager.createQuery("Select r from Review r", Review.class);
 		return query.getResultList();
-		
+
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public Review findById(int id) {
+		return entityManager.find(Review.class, 1);
+	}
+
+	@Transactional
+	@Override
+	public void save(Review review) {
+		entityManager.persist(review);
 	}
 	
 	@Transactional
 	@Override
-	public void insert(Review review) {
-		entityManager.persist(review);
+	public void delete(int id) {
+		Review review = entityManager.find(Review.class, 1);
+		entityManager.remove(review);
 	}
 
 }
