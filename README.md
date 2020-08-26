@@ -312,8 +312,45 @@ public class JpaCustomerDAOImp implements JpaCustomerDAO {
 
 }
  ```
+ Writing data access code with JPA is much better than with ```JDBCTemplate``` and raw ```JDBC```.  But even with the JPA writing DAO implementation can be tedious and repetitive. We often need access to EntityManager or EntityManagerFactory. And not mention the repetitive implementation of findAll, findById, and save for all different entities.
  
  ### Using Spring Data JPA to access the relational database
+
+Spring Data JPA has brought the database access to the next level. Spring Data JPA allows you to focus on the parts that are important and not on the boilerplate needed to accomplish this. It also provides default implementations for the most commonly used data access methods (i.e., findAll, delete, save, etc.). 
+To use Spring Data JPA, you have to extend one of its interfaces. These interfaces are detected, and a default implementation of that repository is generated at runtime. In most cases, it is enough to extend the ```CrudRepository<T, ID> ``` interface. If you need pagination you can extend ```PagingAndSortingRepository<T, ID>``` that has default implementation for pagination. Below is our repository for accessing the database:
+
+```
+@Repository
+public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEntity, Integer>,
+		QuerydslPredicateExecutor<JpaCustomerEntity>, SpringDataJpaCustomerDAOCustom {
+
+	List<JpaCustomerEntity> findAll();
+
+	List<JpaCustomerEntity> findAll(Predicate predicate);
+
+	JpaCustomerEntity findById(int id);
+
+	// derived queries
+
+	List<JpaCustomerEntity> findByFirstName(String firstName);
+
+	List<JpaCustomerEntity> findByEmailIsNotNull();
+
+	// jpql query
+
+	@Query("SELECT c FROM Customer c WHERE c.city=?1")
+	List<JpaCustomerEntity> extractCustomersThatAreFrom(String city);
+
+	// native query
+
+	@Query(value = "SELECT * FROM Customer c WHERE c.state=?1", nativeQuery = true)
+	List<JpaCustomerEntity> extractCustomerFromCountry(String country);
+}
+```
+
+As mention above by extending the CrudRepository we by default get the implementation of commonly used method linke findAll, save, delete etc.. If we want to change
+the signature of these methods we override the signature in our child interface. As we can see above we have changed the signature for the findAll method.
+Another great feature of Spring Data JPA is query derivation.
 
 
 
