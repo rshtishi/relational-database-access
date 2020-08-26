@@ -42,5 +42,33 @@ class JpaProductDAOImplTest {
 		String expectedName = "Lap Top";
 		assertEquals(expectedName, product.getName());
 	}
+	
+	@Test
+	@Order(3)
+	void testSave() {
+		// setup
+		Product product = new Product("PC");
+		//execute
+		productDAO.save(product);
+		//verify
+		int expectedSize = 4;
+		List<Product> products = productDAO.findAll();
+		assertEquals(expectedSize, products.size());
+	}
+	
+	@Test
+	@Order(4)
+	void testDelete() {
+		//setup
+		int id = 4;
+		Product product = productDAO.findById(id);
+		//execute
+		productDAO.delete(id);
+		//verify
+		int expectedSize = 3;
+		List<Product> products = productDAO.findAll();
+		assertEquals(expectedSize, products.size());
+		
+	}
 
 }

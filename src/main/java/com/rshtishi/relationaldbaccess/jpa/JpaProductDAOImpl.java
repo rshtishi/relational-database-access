@@ -32,5 +32,19 @@ public class JpaProductDAOImpl implements JpaProductDAO {
 		
 		return entityManager.find(Product.class,id);
 	}
+	
+	@Transactional
+	@Override
+	public void save(Product product) {
+		entityManager.merge(product);
+	}
+	
+	
+	@Transactional
+	@Override
+	public void delete(int id) {
+		Product product = entityManager.find(Product.class,id);
+		entityManager.remove(product);
+	}
 
 }
