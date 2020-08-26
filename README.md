@@ -12,6 +12,7 @@ at different approaches to accessing the relational database. Below are the topi
 - understaning the JPA (Java Persistence Api)
 - implementing DAO (Data Access Object) with JPA (Java Persistence API) 
 - using Spring Data JPA to access the relational database
+- extending Spring Data JPA capabilities with QueryDSL
 
 ### Understanding the DAO (Data Access Object) pattern
 
@@ -317,6 +318,7 @@ public class JpaCustomerDAOImp implements JpaCustomerDAO {
  ### Using Spring Data JPA to access the relational database
 
 Spring Data JPA has brought the database access to the next level. Spring Data JPA allows you to focus on the parts that are important and not on the boilerplate needed to accomplish this. It also provides default implementations for the most commonly used data access methods (i.e., findAll, delete, save, etc.). 
+
 To use Spring Data JPA, you have to extend one of its interfaces. These interfaces are detected, and a default implementation of that repository is generated at runtime. In most cases, it is enough to extend the ```CrudRepository<T, ID> ``` interface. If you need pagination you can extend ```PagingAndSortingRepository<T, ID>``` that has default implementation for pagination. Below is our repository for accessing the database:
 
 ```
@@ -348,9 +350,108 @@ public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEnti
 }
 ```
 
-As mention above by extending the CrudRepository we by default get the implementation of commonly used method linke findAll, save, delete etc.. If we want to change
+As mention above by extending the ```CrudRepository```, we by default get the implementation of commonly used methods like findAll, save, delete, etc.. If we want to change
 the signature of these methods we override the signature in our child interface. As we can see above we have changed the signature for the findAll method.
-Another great feature of Spring Data JPA is query derivation.
 
+Another great feature of Spring Data JPA is query derivation. Spring Data JPA generates a query just by looking at the corresponding method name in our code.
+We need to abide by the naming convention of Spring Data JPA if we want to use this feature.
 
+Also, Spring Data JPA provides the ``` @Query``` annotation in Spring Data JPA to execute both JPQL and native SQL queries.
+
+### extending Spring Data JPA capabilities with QueryDSL
+
+Querydsl is an extensive Java framework, which helps with creating and running type-safe queries in a domain specific language that is similar to SQL. Below are the dependencies needed to integrate QueryDSL:
+
+```
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+		</dependency>
+```
+
+Also, we need to configure the annotation processing plugin like below:
+
+```
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+```
+
+When we compile the project, QueryDSL will To generate Q-types for your entities.
+
+To add support for our QueryDSL in our spring data repository we need to extends the ```QuerydslPredicateExecutor``` like below:
+
+```
+@Repository
+public interface SpringDataJpaCustomerDAO extends CrudRepository<JpaCustomerEntity, Integer>,
+		QuerydslPredicateExecutor<JpaCustomerEntity>, SpringDataJpaCustomerDAOCustom {
+		...
+}
+```
+
+Also, our spring data repository will extends a custom repository with custom method for querying entities. Below is the interface:
+
+```
+public interface SpringDataJpaCustomerDAOCustom {
+
+	public List<JpaCustomerEntity> findCustomers(AddressFilter filter);
+
+}
+```
+
+The implementation for this custom method should be provided by us. Below is the implementation:
+
+```
+public class SpringDataJpaCustomerDAOImpl implements SpringDataJpaCustomerDAOCustom {
+
+	private static final Logger logger = LoggerFactory.getLogger(SpringDataJpaCustomerDAOImpl.class);
+
+	@Autowired
+	private SpringDataJpaCustomerDAO customerDAO;
+
+	@Override
+	public List<JpaCustomerEntity> findCustomers(AddressFilter filter) {
+
+		BooleanBuilder builder = new BooleanBuilder();
+		if (filter != null) {
+			QJpaCustomerEntity qCustomer = QJpaCustomerEntity.jpaCustomerEntity;
+			if (!StringUtils.isBlank(filter.getZipCode())) {
+				builder.and(qCustomer.zipCode.equalsIgnoreCase(filter.getZipCode()));
+			}
+			if (!StringUtils.isBlank(filter.getCity())) {
+				builder.and(qCustomer.city.equalsIgnoreCase(filter.getCity()));
+			}
+			if (!StringUtils.isBlank(filter.getState())) {
+				builder.and(qCustomer.state.equalsIgnoreCase(filter.getState()));
+			}
+		}
+		return customerDAO.findAll(builder);
+	}
+
+}
+```
+
+Spring will use the  ```SpringDataJpaCustomerDAOCustom``` interface to search for a class ```SpringDataJpaCustomerDAOImpl```  and integrate the manually implemented methods with any query methods included on the  ```SpringDataJpaCustomerDAO```interface from extending the ```SpringDataJpaCustomerDAOCustom``` interface .
 
