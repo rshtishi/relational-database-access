@@ -10,6 +10,7 @@ at different approaches to accessing the relational database. Below are the topi
 - implementing DAO (Data Access Object) pattern with raw ```JDBC```
 - implementing DAO (Data Access Object) pattern with ```JDBCTemplate```
 - understaning the JPA (Java Persistence Api)
+- Database tables relationships translated to object association with JPA
 - implementing DAO (Data Access Object) with JPA (Java Persistence API) 
 - using Spring Data JPA to access the relational database
 - extending Spring Data JPA capabilities with QueryDSL
@@ -264,6 +265,26 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
 
  The ```EntityManagerFactory``` is responsible for creating the entity manager. We configure it by specifying the persistence unit in the persistence.xml file in the META-INF directory.
  
+ ### Database tables relationships translated to object association with JPA
+ 
+ We have three types of relationships between database tables. They are :
+ - one-to-many (a row from the parent table is associated to multiple rows in the child table)
+ - one-to-one (a row from the parent table is associated with only one row from the child table)
+ - many-to-may (both tables are associated with multiple rows, requires a junction table that contains references from the parent tables)
+ 
+ The following diagram depicts all database relatioships mention above:
+ 
+ The foreign key is therefore the most important construct in building a table relationship, and, in a relation database, the foreign key is associated with the child-side only.
+ 
+ When mapping a JPA entity the application developer can map entity relationships either in one direction or in a bidirectional way. This is another difference between the object-oriented entity model and relational database system. When using an ORM tool, the parent and the child-side can reference each other. JPA defines the following association mappings:
+ 
+ - ```@ManyToOne```
+ - ```@OneToMany```
+ - ```@OneToOne```
+ - ```@ManyToMany```
+ 
+ 
+ 
  
  ### Implementing DAO (Data Access Object) with JPA (Java Persistence API) 
  
@@ -358,7 +379,7 @@ We need to abide by the naming convention of Spring Data JPA if we want to use t
 
 Also, Spring Data JPA provides the ``` @Query``` annotation in Spring Data JPA to execute both JPQL and native SQL queries.
 
-### extending Spring Data JPA capabilities with QueryDSL
+### Extending Spring Data JPA capabilities with QueryDSL
 
 Querydsl is an extensive Java framework, which helps with creating and running type-safe queries in a domain specific language that is similar to SQL. Below are the dependencies needed to integrate QueryDSL:
 
@@ -453,5 +474,5 @@ public class SpringDataJpaCustomerDAOImpl implements SpringDataJpaCustomerDAOCus
 }
 ```
 
-Spring will use the  ```SpringDataJpaCustomerDAOCustom``` interface to search for a class ```SpringDataJpaCustomerDAOImpl```  and integrate the manually implemented methods with any query methods included on the  ```SpringDataJpaCustomerDAO```interface from extending the ```SpringDataJpaCustomerDAOCustom``` interface .
+Spring will use the  ```SpringDataJpaCustomerDAOCustom``` interface to search for a class ```SpringDataJpaCustomerDAOImpl```  and integrate the manually implemented methods with any query methods included on the  ```SpringDataJpaCustomerDAO``` repository interface from extending the ```SpringDataJpaCustomerDAOCustom``` interface.
 
