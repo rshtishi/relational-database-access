@@ -34,6 +34,8 @@ class JpaReviewDAOImplTest {
 		assertEquals(expectedSize, reviews.size());
 	}
 
+	@Test
+	@Order(2)
 	void testFindById() {
 		// setup
 		int id = 1;
@@ -65,7 +67,6 @@ class JpaReviewDAOImplTest {
 	void testDelete() {
 		// setup
 		int id = 7;
-		Review review = reviewDAO.findById(id);
 		// execute
 		reviewDAO.delete(id);
 		// verify

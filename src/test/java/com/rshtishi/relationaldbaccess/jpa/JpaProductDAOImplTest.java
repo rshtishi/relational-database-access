@@ -61,7 +61,6 @@ class JpaProductDAOImplTest {
 	void testDelete() {
 		//setup
 		int id = 4;
-		Product product = productDAO.findById(id);
 		//execute
 		productDAO.delete(id);
 		//verify

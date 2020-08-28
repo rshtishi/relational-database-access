@@ -1,9 +1,14 @@
 package com.rshtishi.relationaldbaccess.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +27,17 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NonNull private String name;
-
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Review> reviews= new ArrayList<>();
+	
+	public void addReview(Review review) {
+		reviews.add(review);
+		review.setProduct(this);
+	}
+	
+	public void removeReview(Review review) {
+		reviews.remove(review);
+		review.setProduct(null);
+	}
 
 }
