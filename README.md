@@ -10,7 +10,7 @@ at different approaches to accessing the relational database. Below are the topi
 - implementing DAO (Data Access Object) pattern with raw ```JDBC```
 - implementing DAO (Data Access Object) pattern with ```JDBCTemplate```
 - understaning the JPA (Java Persistence Api)
-- Database tables relationships translated to object association with JPA
+- Database table relationships translated to object associations with JPA
 - implementing DAO (Data Access Object) with JPA (Java Persistence API) 
 - using Spring Data JPA to access the relational database
 - extending Spring Data JPA capabilities with QueryDSL
@@ -265,7 +265,7 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
 
  The ```EntityManagerFactory``` is responsible for creating the entity manager. We configure it by specifying the persistence unit in the persistence.xml file in the META-INF directory.
  
- ### Database tables relationships translated to object association with JPA
+ ### Database table relationships translated to object associations with JPA
  
  We have three types of relationships between database tables. They are :
  - one-to-many (a row from the parent table is associated to multiple rows in the child table)
@@ -278,13 +278,63 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  
  When mapping a JPA entity the application developer can map entity relationships either in one direction or in a bidirectional way. This is another difference between the object-oriented entity model and relational database system. When using an ORM tool, the parent and the child-side can reference each other. JPA defines the following association mappings:
  
- - ```@ManyToOne```
- - ```@OneToMany```
- - ```@OneToOne```
- - ```@ManyToMany```
+ - ```@ManyToOne``` represent the child side in one-to-many table relatioship
+ - ```@OneToMany``` represent the parent side in one-to-many table relationship
+ - ```@OneToOne```  represent both (parent side and child side) in one-to-one table relationship
+ - ```@ManyToMany``` represent the many-to-many relationship
  
+ ##### one-to-many table relationship
  
+ We can mapped this relationship using teh following JPA association:
  
+ - ```@ManyToOne``` association it maps exactly to the one-to-many table relationship. The underlying foreign key is controlled by the child-side. The ```Review``` object has reference to the ```Product``` object and by default is fetched along with ```Product```. To change this we need to modify the change type to lazily loading. Below is the mapping that references the ```Product```:
+ 
+ ```
+ 	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Product product;
+ ```
+ 
+ - Unidirectional ```@oneToMany``` association seems to be the most natural mapping of one-to-many table relationship but behind the scenes, an additional junction table is added that makes this association less efficient that ```@ManyToOne``` or bidirectional ```@OneToMany``` relationship. Since there is no ```@ManyToOne``` side to control this relationship, Hibernate uses a separate junction table to manage the association between a parent row and its child records. Below is the mapping that references the ```Review``` objects:
+ 
+ ```
+ 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Review> reviews= new ArrayList<>();
+ ```
+ 
+ - Bidirectional ```OneToMany``` association has a matching @ManyToOne child-side mapping that controls the underlying one-to-many table relationship. In this association, the foreign key is controlled by the child-side. For this reason, we need and ```mappedBy``` attribute in the parent-side for mirroring the @ManyToOne child-side mapping. Below is the mapping in parent-side:
+ 
+ ```
+ 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Review> reviews= new ArrayList<>();
+ ```
+ 
+ The following is the mapping in child-side:
+ 
+ ```
+ 	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Product product;
+ ```
+ 
+ The following helper method in parent-side class help to keep the parent-side in sync with child-side:
+ 
+ ```
+ 	public void addReview(Review review) {
+		reviews.add(review);
+		review.setProduct(this);
+	}
+	
+	public void removeReview(Review review) {
+		reviews.remove(review);
+		review.setProduct(null);
+	}
+ ```
+ 
+  ##### one-to-one table relationship
+  
+  ##### many-to-many table relationship
+  
  
  ### Implementing DAO (Data Access Object) with JPA (Java Persistence API) 
  
