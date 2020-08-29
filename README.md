@@ -334,20 +334,30 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  - Unidirectional ```@OneToMany``` with ```@JoinColumn```, by mapping the unidirectional ```@OneToMany``` association with ```@JoinColumn``` mapping we place the control on the foreign key on the parent-side. We don't need a junction table in this case. It is more efficient than unidirectional ```@OneToMany``` association but still not near the efficiency of ```@ManyToOne``` and bidirectional ```@OneToMany``` association. In this association besides the regular insert statements, Hibernate issues three update statements for setting the foreign key column on the newly inserted child records. Below is the mapping for the unidirectional ```@OneToMany``` with ```@JoinColumn```.
  
  ```
-  	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+ 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "product_id")
 	List<Review> reviews= new ArrayList<>();
  ```
  
   ##### one-to-one table relationship
   
-  we can map this table relationship using the following JPA mappings:
+we can map this table relationship using the following JPA mappings:
   
-  - Unidirectional ```@OneToOne``` 
+  - Unidirectional ```@OneToOne``` association is similar to  ```@ManyToOne``` association.  The unidirectional ``` @OneToOne``` association controls the associated foreign key. Below is a unidirectional association:
   
-  - Bidirectional ```@OneToOne```
+  - Bidirectional ```@OneToOne``` association allows the parent entity to map the child-side as well. The parent-side defines a mappedBy attribute because the child-side is still in charge of this JPA relationship. Below is mapping association:
+  
+The following helper method in parent-side class help to keep the parent-side in sync with child-side:
   
   ##### many-to-many table relationship
+  
+  - Unidirectional ```@ManyToMany``` association is implemented when there isn’t much need for navigating this association from the both relationship side.  We choose the entity that we see fit to map the ```@ManyToMany``` relationship. Below is the association:
+  
+  - Bidirectional ```@ManyToMany``` association the relationship can be navigated from both sides. In many-to-many table relationships, both ends are parent-sides and the junction table is the child-side. Because the junction table is hidden when using the default @ManyToMany mapping, the application developer must choose an owning and a mappedBy side. The following is the side controlling the association:
+  
+  Below is the mappedBy side:
+  
+  And the helper method for the mapped side to keep both sides in sync:
   
  
  ### Implementing DAO (Data Access Object) with JPA (Java Persistence API) 
