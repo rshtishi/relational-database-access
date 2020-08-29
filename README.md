@@ -290,7 +290,7 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  - ```@ManyToOne``` association it maps exactly to the one-to-many table relationship. The underlying foreign key is controlled by the child-side. The ```Review``` object has reference to the ```Product``` object and by default is fetched along with ```Product```. To change this we need to modify the change type to lazily loading. Below is the mapping that references the ```Product```:
  
  ```
- 	@ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;
  ```
@@ -298,21 +298,21 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  - Unidirectional ```@oneToMany``` association seems to be the most natural mapping of one-to-many table relationship but behind the scenes, an additional junction table is added that makes this association less efficient that ```@ManyToOne``` or bidirectional ```@OneToMany``` relationship. Since there is no ```@ManyToOne``` side to control this relationship, Hibernate uses a separate junction table to manage the association between a parent row and its child records. Below is the mapping that references the ```Review``` objects:
  
  ```
- 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Review> reviews= new ArrayList<>();
  ```
  
  - Bidirectional ```OneToMany``` association has a matching @ManyToOne child-side mapping that controls the underlying one-to-many table relationship. In this association, the foreign key is controlled by the child-side. For this reason, we need and ```mappedBy``` attribute in the parent-side for mirroring the @ManyToOne child-side mapping. Below is the mapping in parent-side:
  
  ```
- 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Review> reviews= new ArrayList<>();
  ```
  
  The following is the mapping in child-side:
  
  ```
- 	@ManyToOne(fetch=FetchType.LAZY)
+   @ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;
  ```
@@ -334,7 +334,7 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  - Unidirectional ```@OneToMany``` with ```@JoinColumn```, by mapping the unidirectional ```@OneToMany``` association with ```@JoinColumn``` mapping we place the control on the foreign key on the parent-side. We don't need a junction table in this case. It is more efficient than unidirectional ```@OneToMany``` association but still not near the efficiency of ```@ManyToOne``` and bidirectional ```@OneToMany``` association. In this association besides the regular insert statements, Hibernate issues three update statements for setting the foreign key column on the newly inserted child records. Below is the mapping for the unidirectional ```@OneToMany``` with ```@JoinColumn```.
  
  ```
- 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "product_id")
 	List<Review> reviews= new ArrayList<>();
  ```
