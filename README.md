@@ -345,9 +345,27 @@ we can map this table relationship using the following JPA mappings:
   
   - Unidirectional ```@OneToOne``` association is similar to  ```@ManyToOne``` association.  The unidirectional ``` @OneToOne``` association controls the associated foreign key. Below is a unidirectional association:
   
+  ```
+  	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="product_id")
+	private Product product;
+  ```
+  
   - Bidirectional ```@OneToOne``` association allows the parent entity to map the child-side as well. The parent-side defines a mappedBy attribute because the child-side is still in charge of this JPA relationship. Below is mapping association:
   
+  ```
+  	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	private ProductDetails details;
+  ```
+  
 The following helper method in parent-side class help to keep the parent-side in sync with child-side:
+
+```
+	public void setDetails(ProductDetails details) {
+		this.details = details;
+		details.setProduct(this);
+	}
+```
   
   ##### many-to-many table relationship
   
