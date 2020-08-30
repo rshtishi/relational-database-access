@@ -48,7 +48,24 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="product_id" type="int">
-				<constraints nullable="false" foreignKeyName="fk_product_id" references="product(id)" />
+				<constraints nullable="false"
+					foreignKeyName="fk_product_id" references="product(id)" />
+			</column>
+		</createTable>
+
+		<createTable tableName="product_details">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="created_by" type="varchar(60)">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_on" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_id" type="int">
+				<constraints nullable="false"
+					foreignKeyName="fk_pd_product_id" references="product(id)" />
 			</column>
 		</createTable>
 

@@ -55,10 +55,30 @@
 			<column name="comment" value="It's worthless" />
 			<column name="product_id" valueNumeric="2" />
 		</insert>
-				<insert tableName="review">
+		<insert tableName="review">
 			<column name="id" valueNumeric="6" />
-			<column name="comment" value="Don't buy it, you will regret it" />
+			<column name="comment"
+				value="Don't buy it, you will regret it" />
 			<column name="product_id" valueNumeric="2" />
+		</insert>
+		<!-- product_details table -->
+		<insert tableName="product_details">
+			<column name="id" valueNumeric="1" />
+			<column name="created_by" value="Rando" />
+			<column name="created_on" value="2005-12-31 23:59:59Z" />
+			<column name="product_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="product_details">
+			<column name="id" valueNumeric="2" />
+			<column name="created_by" value="Rando" />
+			<column name="created_on" value="2005-12-31 23:59:59Z" />
+			<column name="product_id" valueNumeric="2" />
+		</insert>
+		<insert tableName="product_details">
+			<column name="id" valueNumeric="3" />
+			<column name="created_by" value="Rando" />
+			<column name="created_on" value="2005-12-31 23:59:59Z" />
+			<column name="product_id" valueNumeric="3" />
 		</insert>
 	</changeSet>
 </databaseChangeLog>
