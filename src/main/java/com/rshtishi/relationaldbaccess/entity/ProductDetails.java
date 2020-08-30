@@ -1,5 +1,7 @@
 package com.rshtishi.relationaldbaccess.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ public class ProductDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NonNull private String createdBy;
-	@NonNull private String createdOn;
+	@NonNull private LocalDateTime createdOn;
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="product_id")
 	private Product product;

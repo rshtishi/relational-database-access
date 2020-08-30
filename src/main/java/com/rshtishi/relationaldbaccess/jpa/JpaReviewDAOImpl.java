@@ -35,7 +35,7 @@ public class JpaReviewDAOImpl implements JpaReviewDAO {
 	@Transactional
 	@Override
 	public void save(Review review) {
-		entityManager.persist(review);
+		entityManager.merge(review);
 	}
 	
 	@Transactional
