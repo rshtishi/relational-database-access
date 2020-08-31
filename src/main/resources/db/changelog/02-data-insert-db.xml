@@ -80,5 +80,39 @@
 			<column name="created_on" value="2005-12-31 23:59:59Z" />
 			<column name="product_id" valueNumeric="3" />
 		</insert>
+		<!-- manufacturer table -->
+		<insert tableName="manufacturer">
+			<column name="id" valueNumeric="1" />
+			<column name="name" value="Apple" />
+		</insert>
+		<insert tableName="manufacturer">
+			<column name="id" valueNumeric="2" />
+			<column name="name" value="Samsung" />
+		</insert>
+		<!-- product_manufacturer table -->
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="1" />
+			<column name="manufacturer_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="1" />
+			<column name="manufacturer_id" valueNumeric="2" />
+		</insert>
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="2" />
+			<column name="manufacturer_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="2" />
+			<column name="manufacturer_id" valueNumeric="2" />
+		</insert>
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="3" />
+			<column name="manufacturer_id" valueNumeric="1" />
+		</insert>
+		<insert tableName="product_manufacturer">
+			<column name="product_id" valueNumeric="3" />
+			<column name="manufacturer_id" valueNumeric="2" />
+		</insert>
 	</changeSet>
 </databaseChangeLog>

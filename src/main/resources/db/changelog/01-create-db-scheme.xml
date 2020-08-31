@@ -69,5 +69,25 @@
 			</column>
 		</createTable>
 
+		<createTable tableName="manufacturer">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="name" type="varchar(60)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="product_manufacturer">
+			<column name="product_id" type="int">
+				<constraints nullable="false"
+					foreignKeyName="fk_pm_product_id" references="product(id)" />
+			</column>
+			<column name="manufacturer_id" type="int">
+				<constraints nullable="false"
+					foreignKeyName="fk_manufacturer_id" references="manufacturer(id)" />
+			</column>
+		</createTable>
+
 	</changeSet>
 </databaseChangeLog>
