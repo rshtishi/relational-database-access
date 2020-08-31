@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -34,6 +37,10 @@ public class Product {
 	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private ProductDetails details;
 
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "product_manufacturer", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "manufacturer_id"))
+	private List<Manufacturer> manufacturers = new ArrayList<>();
+
 	public void addReview(Review review) {
 		reviews.add(review);
 		review.setProduct(this);
@@ -43,7 +50,7 @@ public class Product {
 		reviews.remove(review);
 		review.setProduct(null);
 	}
-	
+
 	public void setDetails(ProductDetails details) {
 		this.details = details;
 		details.setProduct(this);
