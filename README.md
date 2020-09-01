@@ -346,7 +346,7 @@ we can map this table relationship using the following JPA mappings:
   - Unidirectional ```@OneToOne``` association is similar to  ```@ManyToOne``` association.  The unidirectional ``` @OneToOne``` association controls the associated foreign key. Below is a unidirectional association:
   
   ```
-  	@OneToOne(fetch=FetchType.LAZY)
+  @OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="product_id")
 	private Product product;
   ```
@@ -354,7 +354,7 @@ we can map this table relationship using the following JPA mappings:
   - Bidirectional ```@OneToOne``` association allows the parent entity to map the child-side as well. The parent-side defines a mappedBy attribute because the child-side is still in charge of this JPA relationship. Below is mapping association:
   
   ```
-  	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private ProductDetails details;
   ```
   
@@ -373,9 +373,32 @@ The following helper method in parent-side class help to keep the parent-side in
   
   - Bidirectional ```@ManyToMany``` association the relationship can be navigated from both sides. In many-to-many table relationships, both ends are parent-sides and the junction table is the child-side. Because the junction table is hidden when using the default @ManyToMany mapping, the application developer must choose an owning and a mappedBy side. The following is the side controlling the association:
   
+  ```
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "product_manufacturer", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "manufacturer_id"))
+	private List<Manufacturer> manufacturers = new ArrayList<>();
+  ```
+  
   Below is the mappedBy side:
   
+  ```
+  @ManyToMany(mappedBy="manufacturers")
+	private List<Product> products = new ArrayList<>();
+  ```
+  
   And the helper method for the mapped side to keep both sides in sync:
+  
+  ```
+  public void addProduct(Product product) {
+		products.add(product);
+		product.getManufacturers().add(this);
+	}
+	
+	public void removeProduct(Product product) {
+		products.remove(product);
+		product.getManufacturers().remove(this);
+	}
+  ```
   
  
  ### Implementing DAO (Data Access Object) with JPA (Java Persistence API) 
