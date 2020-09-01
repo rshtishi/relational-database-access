@@ -37,7 +37,6 @@ public class Product {
 	private List<Review> reviews = new ArrayList<>();
 	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.LAZY)
 	private ProductDetails details;
-
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "product_manufacturer", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "manufacturer_id"))
 	private List<Manufacturer> manufacturers = new ArrayList<>();
@@ -56,5 +55,6 @@ public class Product {
 		this.details = details;
 		details.setProduct(this);
 	}
+	
 
 }
