@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Product {
 	private String name;
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
-	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.LAZY)
 	private ProductDetails details;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
