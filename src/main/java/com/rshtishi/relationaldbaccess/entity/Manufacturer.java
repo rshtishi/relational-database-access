@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class Manufacturer {
 	private int id;
 	@NonNull
 	private String name;
-	@ManyToMany(mappedBy = "manufacturers", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "manufacturers", cascade = { CascadeType.PERSIST, CascadeType.MERGE },fetch = FetchType.LAZY)
 	private List<Product> products = new ArrayList<>();
 
 	public void addProduct(Product product) {
