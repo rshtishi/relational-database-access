@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.rshtishi.relationaldbaccess.entity.Manufacturer;
+import com.rshtishi.relationaldbaccess.entity.Product;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -74,6 +75,16 @@ class JpaManufacturerDAOImplTest {
 	void testSaveWithManyProducts() {
 		// setup
 		Manufacturer manufacturer = new Manufacturer("Xiaomi");
+		Product product1 = new Product("Smart Watch");
+		Product product2 = new Product("Smart Band");
+		manufacturer.addProduct(product1);
+		manufacturer.addProduct(product2);
+		//execute
+		manufacturerDAO.save(manufacturer);
+		// verify
+		List<Manufacturer> manufacturers = manufacturerDAO.findAll();
+		int expectedSize = 3;
+		assertEquals(expectedSize, manufacturers.size());
 		
 		
 	}
