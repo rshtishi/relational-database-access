@@ -38,7 +38,7 @@ public class Manufacturer {
 	}
 
 	public void removeProduct(Product product) {
-		products.remove(product);
 		product.getManufacturers().remove(this);
+		//products.remove(product);
 	}
 }

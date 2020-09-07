@@ -61,13 +61,13 @@ class JpaManufacturerDAOImplTest {
 	@Order(4)
 	void testDelete() {
 		// setup
-		int id = 3;
+		int id = 1;
 		// execute
 		manufacturerDAO.delete(id);
 		// verify
-		//List<Manufacturer> manufacturers = manufacturerDAO.findAll();
+		List<Manufacturer> manufacturers = manufacturerDAO.findAll();
 		int expectedSize = 2;
-		//assertEquals(expectedSize, manufacturers.size());
+		assertEquals(expectedSize, manufacturers.size());
 	}
 	
 	@Test

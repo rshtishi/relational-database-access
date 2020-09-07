@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rshtishi.relationaldbaccess.dao.JpaManufacturerDAO;
 import com.rshtishi.relationaldbaccess.entity.Manufacturer;
+import com.rshtishi.relationaldbaccess.entity.Product;
 
 @Repository
 public class JpaManufacturerDAOImpl implements JpaManufacturerDAO {
@@ -42,6 +43,9 @@ public class JpaManufacturerDAOImpl implements JpaManufacturerDAO {
 	@Override
 	public void delete(int id) {
 		Manufacturer manufacturer = entityManager.find(Manufacturer.class, id);
+		for(Product product:manufacturer.getProducts()) {
+			manufacturer.removeProduct(product);
+		}
 		entityManager.remove(manufacturer);
 	}
 
