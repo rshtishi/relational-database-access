@@ -85,8 +85,6 @@ class JpaManufacturerDAOImplTest {
 		List<Manufacturer> manufacturers = manufacturerDAO.findAll();
 		int expectedSize = 3;
 		assertEquals(expectedSize, manufacturers.size());
-		
-		
 	}
 
 }
