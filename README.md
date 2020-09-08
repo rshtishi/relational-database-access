@@ -274,6 +274,8 @@ The entity manager ```javax.persistence.EntityManager``` provides the operations
  
  The following diagram depicts all database relatioships mention above:
  
+ ![Database Schema](https://github.com/rshtishi/relational-database-access/blob/master/src/main/resources/db/db-schema.jpeg)
+ 
  The foreign key is therefore the most important construct in building a table relationship, and, in a relation database, the foreign key is associated with the child-side only.
  
  When mapping a JPA entity the application developer can map entity relationships either in one direction or in a bidirectional way. This is another difference between the object-oriented entity model and relational database system. When using an ORM tool, the parent and the child-side can reference each other. JPA defines the following association mappings:
